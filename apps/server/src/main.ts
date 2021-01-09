@@ -1,10 +1,12 @@
 import http, {Server} from 'http';
 
 import express, {Request, Response, Router} from 'express';
-import {initSocketIo} from './app/socket-io';
+import {emitEvent, initSocketIo} from './app/socket-io';
 import {ISignInPostReq, ISignInPostRes} from '@medondo/api-interfaces/sign-in';
 import {addNewUser, USERS} from './app/users-service';
 import {IUsersGetRes} from '@medondo/api-interfaces/users';
+import {IUser} from '@medondo/api-interfaces/interfaces/user.interface';
+import {SocketEvents} from '@medondo/api-interfaces/enums/socket-events';
 
 const app = express();
 const httpAppServer: Server = http.createServer(app);
@@ -20,7 +22,9 @@ router.post<never, ISignInPostRes, ISignInPostReq>('/sign-in', (
 	req: Request<never, ISignInPostRes, ISignInPostReq>,
 	res: Response<ISignInPostRes>,
 ) => {
-	res.json(addNewUser(req.body));
+	const user: IUser = addNewUser(req.body);
+	emitEvent(SocketEvents.SIGN_IN, user);
+	res.json(user);
 });
 
 router.get<never, IUsersGetRes>('/users', (

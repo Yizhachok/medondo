@@ -20,7 +20,7 @@ export function initSocketIo(httpServer: Server) {
 
 		socket.on('disconnect', () => {
 			if (userId) {
-				emitEvent(SocketEvents.SIGN_OUT, userId);
+				emitEvent(SocketEvents.SIGN_OUT, {id: userId});
 				removeUser(userId);
 			}
 		});

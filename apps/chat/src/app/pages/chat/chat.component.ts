@@ -7,7 +7,9 @@ import {IUser} from '@medondo/api-interfaces/interfaces/user.interface';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {IMessage} from '@medondo/api-interfaces/interfaces/message.interface';
 import {scan} from 'rxjs/operators';
+import {UntilDestroy, untilDestroyed} from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
 	selector: 'medondo-chat',
 	templateUrl: './chat.component.html',
@@ -40,18 +42,23 @@ export class ChatComponent implements OnInit, OnDestroy {
 		this.chatService.connect();
 		this.chatService.setOnline(this.accountService.data.id);
 
-		this._route.data.subscribe(({users}: {users: IUser[]}) => this._addUsers(users));
+		this._route.data
+			.pipe(untilDestroyed(this))
+			.subscribe(({users}: {users: IUser[]}) => this._addUsers(users));
 
 		this.chatService
 			.onUserJoin()
+			.pipe(untilDestroyed(this))
 			.subscribe((user) => this._addUsers([user]));
 
 		this.chatService
 			.onUserOnline()
+			.pipe(untilDestroyed(this))
 			.subscribe((userId) => this._setUserOnline(userId));
 
 		this.chatService
 			.onUserDisconnect()
+			.pipe(untilDestroyed(this))
 			.subscribe(({id}) => this._removeUser(id));
 
 		this.messages$ = this.chatService

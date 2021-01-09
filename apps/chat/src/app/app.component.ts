@@ -1,13 +1,10 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Message } from '@medondo/api-interfaces';
+import {Component} from '@angular/core';
 
 @Component({
-  selector: 'medondo-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+	// eslint-disable-next-line @angular-eslint/component-selector
+	selector: 'body',
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
-  constructor(private http: HttpClient) {}
 }

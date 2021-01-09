@@ -1,0 +1,34 @@
+:host {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+}
+
+mat-sidenav-container {
+	flex: 1 1 auto;
+}
+
+mat-sidenav {
+	width: 290px;
+}
+
+mat-sidenav-content {
+	display: flex;
+	flex-direction: column;
+}
+
+#chat-content {
+	flex: 1 1 auto;
+	overflow-y: visible;
+}
+
+#no-messages-card {
+	max-width: 400px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.user-item {
+	cursor: pointer;
+}

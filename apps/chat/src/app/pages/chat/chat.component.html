@@ -1,0 +1,88 @@
+<mat-sidenav-container *ngIf="accountService.data$ | async as accountData">
+	<mat-sidenav position="end" mode="side" [(opened)]="sidebarOpen">
+		<mat-card class="rounded-0 mb-3">
+			<mat-card-header>
+				<mat-card-title>{{accountData.name}}</mat-card-title>
+				<mat-card-subtitle class="mb-0">ID {{accountData.id}}</mat-card-subtitle>
+				<div class="flex-grow-1"></div>
+				<button mat-icon-button (click)="signOut()">
+					<mat-icon>clear</mat-icon>
+				</button>
+			</mat-card-header>
+		</mat-card>
+		<ng-container *ngIf="users$ | async as users">
+			<mat-list *ngIf="users.length; else noUsers">
+				<div mat-subheader>Users online</div>
+				<mat-list-item
+					class="user-item"
+					*ngFor="let user of users"
+					(click)="userClick(user)"
+					matRipple
+					matRippleCentered="true">
+					<mat-icon mat-list-icon [ngClass]="{'text-success': user.online}">account_circle</mat-icon>
+					<div mat-line>{{user.name}}</div>
+					<div mat-line>ID {{user.id}}</div>
+				</mat-list-item>
+			</mat-list>
+			<ng-template #noUsers>
+				<mat-card class="mx-3 text-center">
+					<h3>There no online users yet</h3>
+				</mat-card>
+			</ng-template>
+		</ng-container>
+	</mat-sidenav>
+	<mat-sidenav-content>
+		<div id="chat-content" class="container-fluid py-3">
+			<ng-container *ngIf="messages$ | async as messages; else noMessages">
+				<ng-container *ngIf="messages.length; else noMessages">
+					<div
+						class="d-flex mb-3"
+						[ngClass]="{ 'justify-content-end': accountData.id === message.user }"
+						*ngFor="let message of messages">
+						<mat-card class="w-75">
+							<span class="d-inline-block text-muted me-2">{{message.time | date:'HH:mm:ss'}}</span>
+							<span
+								class="d-inline-block text-primary fw-bold me-2"
+								*ngIf="accountData.id !== message.user">
+							{{allUsers[message.user].name}}:
+						</span>
+							{{message.text}}
+						</mat-card>
+					</div>
+				</ng-container>
+			</ng-container>
+			<ng-template #noMessages>
+				<mat-card id="no-messages-card">
+					<h2>There no new messages yet</h2>
+				</mat-card>
+			</ng-template>
+		</div>
+		<mat-divider class="w-100 m-auto"></mat-divider>
+		<form class="container-fluid py-2 bg-white" [formGroup]="form" (ngSubmit)="onSend()">
+			<div class="row align-items-center">
+				<div class="col">
+					<mat-form-field class="w-100">
+						<input
+							matInput
+							formControlName="text"
+							placeholder="Your message"
+							type="text"
+							autofocus
+							autocomplete="off"
+							required>
+						<mat-error *ngIf="form.get('text').errors as errors" >
+							<ng-container *ngIf="errors.minlength as minLengthErr">
+								Name must contain {{minLengthErr.requiredLength}} symbols but actual length is {{minLengthErr.actualLength}}
+							</ng-container>
+						</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="col-auto">
+					<button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+						Enter
+					</button>
+				</div>
+			</div>
+		</form>
+	</mat-sidenav-content>
+</mat-sidenav-container>

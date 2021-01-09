@@ -17,7 +17,12 @@
             "tsConfig": "apps/chat/tsconfig.app.json",
             "aot": true,
             "assets": ["apps/chat/src/favicon.ico", "apps/chat/src/assets"],
-            "styles": ["apps/chat/src/styles.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules"
+              ]
+            },
+            "styles": ["./node_modules/@angular/material/prebuilt-themes/indigo-pink.css", "apps/chat/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -113,57 +118,6 @@
         }
       }
     },
-    "api": {
-      "root": "apps/api",
-      "sourceRoot": "apps/api/src",
-      "projectType": "application",
-      "prefix": "api",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/apps/api",
-            "main": "apps/api/src/main.ts",
-            "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/api/src/environments/environment.ts",
-                  "with": "apps/api/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/api/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/api"],
-          "options": {
-            "jestConfig": "apps/api/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "api-interfaces": {
       "root": "libs/api-interfaces",
       "sourceRoot": "libs/api-interfaces/src",
@@ -173,6 +127,56 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
+          }
+        }
+      }
+    },
+    "server": {
+      "root": "apps/server",
+      "sourceRoot": "apps/server/src",
+      "projectType": "application",
+      "prefix": "server",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/server",
+            "main": "apps/server/src/main.ts",
+            "tsConfig": "apps/server/tsconfig.app.json"
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/server/src/environments/environment.ts",
+                  "with": "apps/server/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "server:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/server/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/server"],
+          "options": {
+            "jestConfig": "apps/server/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

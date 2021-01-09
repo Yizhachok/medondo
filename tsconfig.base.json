@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@medondo/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@medondo/api-interfaces/*": ["libs/api-interfaces/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

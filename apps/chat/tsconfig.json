@@ -12,5 +12,12 @@
     {
       "path": "./tsconfig.editor.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "paths": {
+      "@core/*": ["apps/chat/src/app/core/*"],
+      "@shared/*": ["apps/chat/src/app/shared/*"],
+      "@medondo/api-interfaces/*": ["libs/api-interfaces/src/*"]
+    }
+  }
 }

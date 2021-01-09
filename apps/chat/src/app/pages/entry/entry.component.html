@@ -1,0 +1,29 @@
+<div class="container-fluid py-5">
+	<form [formGroup]="form" (ngSubmit)="onSubmit()">
+		<h1 class="text-center">Welcome to Medondo Chat App</h1>
+		<p class="text-center">Please enter your name to start chat</p>
+		<div class="mb-3">
+			<mat-form-field class="w-100">
+				<input
+					matInput
+					formControlName="name"
+					placeholder="Name"
+					type="text"
+					autofocus
+					autocomplete="off"
+					required>
+				<mat-error *ngIf="form.get('name').errors as errors" >
+					<ng-container *ngIf="errors.required">
+						Name field is required
+					</ng-container>
+					<ng-container *ngIf="errors.minlength as minLengthErr">
+						Name must contain {{minLengthErr.requiredLength}} symbols but actual length is {{minLengthErr.actualLength}}
+					</ng-container>
+				</mat-error>
+			</mat-form-field>
+		</div>
+		<button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+			Enter
+		</button>
+	</form>
+</div>
